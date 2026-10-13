@@ -1,0 +1,125 @@
+{% load static %}
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{% static 'accesos/css/ingresos.css' %}" />
+
+    <title>Control de Acceso</title>
+  </head>
+
+  <body>
+    <h1>Control de Acceso</h1>
+
+    <button type="button" id="btn-registrar-ingreso" class="btn-ingreso">+ Registrar Ingreso</button>
+
+    <hr />
+
+    <h2>Registros dentro</h2>
+
+    <input type="text" placeholder="Buscar por nombre, casa o patente..." />
+
+    <br /><br />
+
+    <table>
+      <thead>
+        <tr>
+          <th>Hora de Ingreso</th>
+          <th>Fecha de Ingreso</th>
+          <th>Nombre Dueño</th>
+          <th>Casa</th>
+          <th>Nombre Persona que Ingresa</th>
+          <th>Tipo</th>
+          <th>Patente</th>
+          <th>Acompañantes</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for acceso in accesos %}
+
+        <tr>
+          <td>{{ acceso.fecha_hora_ingreso|time:"H:i" }}</td>
+
+          <td>{{ acceso.fecha_hora_ingreso|date:"d/m/Y" }}</td>
+
+          <td>{% for persona in acceso.vivienda.personas.all %} {% if persona.tipo_persona == "SOCIO" %} {{ persona.nombre }} {{ persona.apellido }} {% endif %} {% endfor %}</td>
+
+          <td>{{ acceso.vivienda.numero }}</td>
+
+          <td>{{ acceso.nombre_ingreso }}</td>
+
+          <td>
+            <span class="tipo {{ acceso.tipo_acceso|lower }}"> {{ acceso.get_tipo_acceso_display }} </span>
+          </td>
+
+          <td>{% if acceso.patente %} {{ acceso.patente }} {% else %} - {% endif %}</td>
+
+          <td>{{ acceso.cantidad_acompanantes }}</td>
+
+          <td>
+            <button type="button" class="btn-abrir-salida" data-acceso-id="{{ acceso.id }}">Registrar salida</button>
+          </td>
+        </tr>
+
+        {% empty %}
+
+        <tr>
+          <td colspan="9">No hay personas actualmente dentro del recinto.</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- ========================= -->
+    <!-- MODAL REGISTRAR INGRESO -->
+    <!-- ========================= -->
+
+    <div id="modal-ingreso" class="modal">
+      <div class="modal-contenido">
+        <button type="button" id="cerrar-modal" class="cerrar-modal">×</button>
+
+        <h2>Registrar ingreso</h2>
+
+        <p>Registra los datos de la persona que ingresa al recinto.</p>
+
+        <form method="POST" action="{% url 'registrar_ingreso' %}">
+          {% csrf_token %} {{ form.as_p }}
+
+          <button type="submit" class="btn-ingreso">Registrar ingreso</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- ========================= -->
+    <!-- MODAL REGISTRAR SALIDA -->
+    <!-- ========================= -->
+
+    <div id="modal-salida" class="modal">
+      <div class="modal-contenido">
+        <button type="button" id="cerrar-modal-salida" class="cerrar-modal">×</button>
+
+        <h2>Registrar salida</h2>
+
+        <p>Registra los datos de la salida.</p>
+
+        <form method="POST" action="{% url 'registrar_salida' %}">
+          {% csrf_token %}
+
+          <input type="hidden" id="id_acceso_salida" name="acceso_id" value="" />
+
+          <div class="campo-formulario">{{ salida_form.nombre_quien_retira.label_tag }} {{ salida_form.nombre_quien_retira }}</div>
+
+          <button type="submit" class="btn-salida">Registrar salida</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="{% static 'accesos/js/ingresos.js' %}"></script>
+  </body>
+</html>

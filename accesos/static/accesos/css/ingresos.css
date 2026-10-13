@@ -1,0 +1,334 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   GENERAL
+========================= */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f4f6f8;
+    color: #1f2937;
+    min-height: 100vh;
+}
+
+
+/* =========================
+   CONTENEDOR PRINCIPAL
+========================= */
+
+body {
+    padding: 35px 45px;
+}
+
+h1 {
+    font-size: 30px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+h1::after {
+    content: "Gestión de personas y vehículos dentro del recinto";
+    display: block;
+    font-size: 14px;
+    font-weight: 400;
+    color: #6b7280;
+    margin-top: 8px;
+}
+
+
+/* =========================
+   BOTÓN REGISTRAR INGRESO
+========================= */
+
+.btn-ingreso {
+    margin-top: 25px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btn-ingreso:hover {
+    background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+
+/* =========================
+   SEPARADOR
+========================= */
+
+hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 30px 0;
+}
+
+
+/* =========================
+   SECCIÓN
+========================= */
+
+h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+    color: #111827;
+}
+
+p {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+
+/* =========================
+   BUSCADOR
+========================= */
+
+input[type="text"] {
+    width: 100%;
+    max-width: 450px;
+    padding: 12px 15px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+input[type="text"]:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+input[type="text"]::placeholder {
+    color: #9ca3af;
+}
+
+
+/* =========================
+   TABLA
+========================= */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+
+/* CABECERA */
+
+thead {
+    background-color: #f8fafc;
+}
+
+th {
+    padding: 15px 14px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6b7280;
+    font-weight: 700;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+/* FILAS */
+
+td {
+    padding: 15px 14px;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: middle;
+}
+
+tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+
+/* =========================
+   TIPOS DE ACCESO
+========================= */
+
+.tipo {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* Residente */
+
+.tipo.residente {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+
+/* Visita */
+
+.tipo.visita {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+
+/* Trabajo */
+
+.tipo.trabajo {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+
+/* Otro */
+
+.tipo.otro {
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+
+/* =========================
+   BOTÓN SALIDA
+========================= */
+
+.btn-salida {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.btn-salida:hover {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+
+/* =========================
+   MENSAJE TABLA VACÍA
+========================= */
+
+tbody tr td[colspan="9"] {
+    text-align: center;
+    padding: 40px;
+    color: #9ca3af;
+}
+
+
+
+
+/* =========================
+   MODAL Agregar Ingreso
+========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-contenido {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+}
+
+.cerrar-modal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    background: none;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+    body {
+        padding: 25px 20px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 20px 15px;
+    }
+
+    h1 {
+        font-size: 23px;
+    }
+
+    button {
+        width: 100%;
+    }
+
+    input[type="text"] {
+        max-width: none;
+    }
+}
