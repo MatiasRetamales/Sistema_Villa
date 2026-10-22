@@ -75,3 +75,16 @@ class Movimiento(models.Model):
 
     def __str__(self):
         return f"{self.get_tipo_display()} - {self.acceso}"
+    
+    
+class AcompananteAcceso(models.Model):
+    acceso = models.ForeignKey(
+        "Acceso",
+        on_delete=models.CASCADE,
+        related_name="acompanantes",
+    )
+    nombre = models.CharField(max_length=150)
+    rut = models.CharField(max_length=12)
+
+    def __str__(self):
+        return f"{self.nombre} - {self.rut}"

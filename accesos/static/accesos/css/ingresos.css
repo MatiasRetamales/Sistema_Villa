@@ -291,6 +291,90 @@ tbody tr td[colspan="9"] {
     cursor: pointer;
 }
 
+/* Modal de ingreso adaptable a la pantalla */
+#modal-ingreso {
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* El contenido no sobrepasa la altura de la ventana */
+#modal-ingreso .modal-contenido {
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Espacio entre los datos de cada acompañante */
+#campos-acompanantes .campo-acompanante {
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Evita que los campos se salgan del modal */
+#modal-ingreso input,
+#modal-ingreso select,
+#modal-ingreso textarea {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* Menú de secciones */
+
+.menu-secciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.btn-seccion {
+    margin-top: 0;
+    padding: 12px 18px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: white;
+    color: #374151;
+    cursor: pointer;
+}
+
+.btn-seccion:hover {
+    background-color: #e5e7eb;
+    transform: none;
+}
+
+.btn-seccion.activo {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: white;
+}
+
+.contenido-seccion[hidden] {
+    display: none !important;
+}
+
+.contenedor-tabla-ingresos {
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: auto;
+    border-radius: 8px;
+}
+
+#tabla-ingresos {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#tabla-ingresos thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #f2f2f2;
+}
+
 
 /* =========================
    RESPONSIVE

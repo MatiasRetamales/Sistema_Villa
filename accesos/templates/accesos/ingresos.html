@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="{% static 'accesos/css/ingresos.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
 
     <title>Control de Acceso</title>
   </head>
@@ -14,67 +16,207 @@
   <body>
     <h1>Control de Acceso</h1>
 
-    <button type="button" id="btn-registrar-ingreso" class="btn-ingreso">+ Registrar Ingreso</button>
+    <nav class="menu-secciones">
+      <button type="button" class="btn-seccion activo" data-seccion="ingresos">Ingresos</button>
 
-    <hr />
+      <button type="button" class="btn-seccion" data-seccion="trabajo">Permisos de trabajo</button>
 
-    <h2>Registros dentro</h2>
+      <button type="button" class="btn-seccion" data-seccion="administrativos">Permisos administrativos</button>
+    </nav>
 
-    <input type="text" placeholder="Buscar por nombre, casa o patente..." />
+    <div id="seccion-ingresos" class="contenido-seccion">
+      <button type="button" id="btn-registrar-ingreso" class="btn-ingreso">+ Registrar Ingreso</button>
 
-    <br /><br />
+      <hr />
 
-    <table>
-      <thead>
-        <tr>
-          <th>Hora de Ingreso</th>
-          <th>Fecha de Ingreso</th>
-          <th>Nombre Dueño</th>
-          <th>Casa</th>
-          <th>Nombre Persona que Ingresa</th>
-          <th>Tipo</th>
-          <th>Patente</th>
-          <th>Acompañantes</th>
-          <th>Acción</th>
-        </tr>
-      </thead>
+      <h2>Registros dentro</h2>
 
-      <tbody>
-        {% for acceso in accesos %}
+      <input type="text" id="buscar-ingresos" class="buscador-tabla" placeholder="Buscar por nombre, casa o patente..." autocomplete="off" />
 
-        <tr>
-          <td>{{ acceso.fecha_hora_ingreso|time:"H:i" }}</td>
+      <br /><br />
+     <div class="contenedor-tabla-ingresos">
+      <table id="tabla-ingresos">
+        <thead>
+          <tr>
+            <th>Hora de Ingreso</th>
+            <th>Fecha de Ingreso</th>
+            <th>Nombre Dueño</th>
+            <th>Casa</th>
+            <th>Nombre Persona que Ingresa</th>
+            <th>Tipo</th>
+            <th>Patente</th>
+            <th>Acompañantes</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
 
-          <td>{{ acceso.fecha_hora_ingreso|date:"d/m/Y" }}</td>
+        <tbody>
+          {% for acceso in accesos %}
 
-          <td>{% for persona in acceso.vivienda.personas.all %} {% if persona.tipo_persona == "SOCIO" %} {{ persona.nombre }} {{ persona.apellido }} {% endif %} {% endfor %}</td>
+          <tr>
+            <td>{{ acceso.fecha_hora_ingreso|time:"H:i" }}</td>
 
-          <td>{{ acceso.vivienda.numero }}</td>
+            <td>{{ acceso.fecha_hora_ingreso|date:"d/m/Y" }}</td>
 
-          <td>{{ acceso.nombre_ingreso }}</td>
+            <td>{% for persona in acceso.vivienda.personas.all %} {% if persona.tipo_persona == "SOCIO" %} {{ persona.nombre }} {{ persona.apellido }} {% endif %} {% endfor %}</td>
 
-          <td>
-            <span class="tipo {{ acceso.tipo_acceso|lower }}"> {{ acceso.get_tipo_acceso_display }} </span>
-          </td>
+            <td>{{ acceso.vivienda.numero }}</td>
 
-          <td>{% if acceso.patente %} {{ acceso.patente }} {% else %} - {% endif %}</td>
+            <td>{{ acceso.nombre_ingreso }}</td>
 
-          <td>{{ acceso.cantidad_acompanantes }}</td>
+            <td>
+              <span class="tipo {{ acceso.tipo_acceso|lower }}"> {{ acceso.get_tipo_acceso_display }} </span>
+            </td>
 
-          <td>
-            <button type="button" class="btn-abrir-salida" data-acceso-id="{{ acceso.id }}">Registrar salida</button>
-          </td>
-        </tr>
+            <td>{% if acceso.patente %} {{ acceso.patente }} {% else %} - {% endif %}</td>
 
-        {% empty %}
+            <td>
+              <strong>{{ acceso.cantidad_acompanantes }}</strong>
 
-        <tr>
-          <td colspan="9">No hay personas actualmente dentro del recinto.</td>
-        </tr>
+              {% for acompanante in acceso.acompanantes.all %}
+              <div class="detalle-acompanante" style="margin-top: 6px">
+                <strong>{{ acompanante.nombre }}</strong>
+                <br />
+                <small>RUT: {{ acompanante.rut }}</small>
+              </div>
+              {% empty %} {% if acceso.cantidad_acompanantes > 0 %}
+              <div><small>Datos no registrados</small></div>
+              {% else %}
+              <div><small>Sin acompañantes</small></div>
+              {% endif %} {% endfor %}
+            </td>
 
-        {% endfor %}
-      </tbody>
-    </table>
+            <td>
+              <button type="button" class="btn-abrir-salida" data-acceso-id="{{ acceso.id }}">Registrar salida</button>
+            </td>
+          </tr>
+
+          {% empty %}
+
+          <tr>
+            <td colspan="9">No hay personas actualmente dentro del recinto.</td>
+          </tr>
+
+          {% endfor %}
+        </tbody>
+      </table>
+     </div>
+    </div>
+
+    <div id="seccion-trabajo" class="contenido-seccion" hidden>
+      <h2>Permisos de trabajo</h2>
+      <input type="text" id="buscar-trabajo" class="buscador-tabla" placeholder="Buscar por casa, trabajo, nombre o RUT..." autocomplete="off" />
+
+      <div class="tabla-contenedor">
+        <table id="tabla-trabajo">
+          <thead>
+            <tr>
+              <th>Casa</th>
+              <th>Tipo de trabajo</th>
+              <th>Fecha de inicio</th>
+              <th>Fecha de término</th>
+              <th>Personas autorizadas</th>
+              <th>Estado</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for autorizacion in autorizaciones %}
+            <tr>
+              <td>{{ autorizacion.registro.numero }}</td>
+
+              <td>{{ autorizacion.tipo_trabajo }}</td>
+
+              <td>{{ autorizacion.fecha_inicio|date:"d/m/Y" }}</td>
+
+              <td>{% if autorizacion.fecha_termino %} {{ autorizacion.fecha_termino|date:"d/m/Y" }} {% else %} Sin fecha definida {% endif %}</td>
+
+              <td>
+                {% for persona in autorizacion.personas_autorizadas.all %}
+                <div>
+                  <strong>{{ persona.nombre }}</strong>
+                  {% if persona.rut %}
+                  <br />
+                  <small>RUT: {{ persona.rut }}</small>
+                  {% endif %}
+                </div>
+                {% empty %}
+                <span>Sin personas registradas</span>
+                {% endfor %}
+              </td>
+
+              <td>
+                <span class="tipo {{ autorizacion.estado|lower }}"> {{ autorizacion.get_estado_display }} </span>
+              </td>
+
+              <td>{% if autorizacion.observaciones %} {{ autorizacion.observaciones }} {% else %} - {% endif %}</td>
+            </tr>
+
+            {% empty %}
+            <tr>
+              <td colspan="7">No hay permisos de trabajo registrados.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div id="seccion-administrativos" class="contenido-seccion" hidden>
+      <h2>Permisos administrativos</h2>
+      <input type="text" id="buscar-administrativos" class="buscador-tabla" placeholder="Buscar por casa, tipo, nombre o RUT..." autocomplete="off" />
+
+      <div class="tabla-contenedor">
+        <table id="tabla-administrativos">
+          <thead>
+            <tr>
+              <th>Tipo de permiso</th>
+              <th>Nombre de la persona</th>
+              <th>RUT</th>
+              <th>Casa</th>
+              <th>Fecha de inicio</th>
+              <th>Fecha de término</th>
+              <th>Estado</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for permiso in permisos_administrativos %}
+            <tr>
+              <td>{{ permiso.tipo }}</td>
+
+              <td>{{ permiso.nombre_persona }}</td>
+
+              <td>{% if permiso.rut_persona %} {{ permiso.rut_persona }} {% else %} - {% endif %}</td>
+
+              <td>{% if permiso.registro %} {{ permiso.registro.numero }} {% else %} No asignada {% endif %}</td>
+
+              <td>{{ permiso.fecha_inicio|date:"d/m/Y H:i" }}</td>
+
+              <td>{% if permiso.fecha_termino %} {{ permiso.fecha_termino|date:"d/m/Y H:i" }} {% else %} Sin fecha definida {% endif %}</td>
+
+              <td>
+                {% if permiso.activa %}
+                <span class="tipo activa">Activa</span>
+                {% else %}
+                <span class="tipo cancelada">Inactiva</span>
+                {% endif %}
+              </td>
+
+              <td>{% if permiso.observaciones %} {{ permiso.observaciones }} {% else %} - {% endif %}</td>
+            </tr>
+
+            {% empty %}
+            <tr>
+              <td colspan="8">No hay permisos administrativos registrados.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
 
     <!-- ========================= -->
     <!-- MODAL REGISTRAR INGRESO -->
@@ -90,6 +232,9 @@
 
         <form method="POST" action="{% url 'registrar_ingreso' %}">
           {% csrf_token %} {{ form.as_p }}
+
+          <!-- Aquí aparecerán los campos de los acompañantes -->
+          <div id="campos-acompanantes"></div>
 
           <button type="submit" class="btn-ingreso">Registrar ingreso</button>
         </form>
