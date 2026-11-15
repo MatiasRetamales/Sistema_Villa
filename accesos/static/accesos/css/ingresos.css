@@ -68,6 +68,24 @@ h1::after {
     transform: translateY(-1px);
 }
 
+/* =========================
+   BOTÓN REGISTRAR SALIDA
+========================= */
+.btn-abrir-salida {
+    margin-top: 25px;
+    background-color: #f87171;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+
+
 
 /* =========================
    SEPARADOR

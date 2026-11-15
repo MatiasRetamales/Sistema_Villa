@@ -6,6 +6,7 @@ from .models import Acceso
 from autorizaciones.models import AutorizacionTrabajo
 from autorizaciones.models import AutorizacionAdministrativa
 from .models import Acceso, AcompananteAcceso
+from django.utils import timezone
 
 
 
